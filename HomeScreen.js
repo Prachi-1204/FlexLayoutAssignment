@@ -7,12 +7,13 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import RegisterScreen from './RegisterScreen';
 
 const HomeScreen = ({route}) => {
-  const {fullName, checked, education, technology} = route.params;
+  const {fullName, checked, education, technology, selectedDate} = route.params;
 
   return (
     <View style={styles.main}>
       <Text style={styles.text}>Name : {fullName}</Text>
       <Text style={styles.text}>Gender : {checked}</Text>
+      <Text style={styles.text}>DoB : {selectedDate}</Text>
       <Text style={styles.text}>Educational Level : {education}</Text>
       <Text style={styles.text}>Technologies : {technology}</Text>
     </View>

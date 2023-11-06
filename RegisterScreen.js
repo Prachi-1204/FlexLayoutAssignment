@@ -1,8 +1,16 @@
 import * as React from 'react';
-import {View, Text, TextInput, StyleSheet, Pressable} from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Pressable,
+  TouchableOpacity,
+} from 'react-native';
 import {RadioButton} from 'react-native-paper';
 import {Dropdown} from 'react-native-element-dropdown';
 import CheckBox from '@react-native-community/checkbox';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import {black} from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 
@@ -21,6 +29,26 @@ const RegisterScreen = ({navigation}) => {
   const [checked, setChecked] = React.useState('');
   const [education, setEducation] = React.useState('');
   const [technology, setTechnology] = React.useState([]);
+  const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
+  const [selectedDate, setSelectedDate] = React.useState('Select');
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = date => {
+    console.warn('A date has been picked: ', date);
+    const dob = new Date(date);
+    const splitTime = dob.toISOString().split('T');
+    const splitdate = splitTime[0].split('-');
+    //console.log(splitdate[2] + '/' + splitdate[1] + '/' + splitdate[0]);
+    setSelectedDate(splitdate[2] + '/' + splitdate[1] + '/' + splitdate[0]);
+    hideDatePicker();
+  };
 
   //const [date, setDate] = React.useState(new Date());
   const handleRegister = () => {
@@ -29,6 +57,7 @@ const RegisterScreen = ({navigation}) => {
       checked,
       education,
       technology,
+      selectedDate,
     });
   };
 
@@ -45,30 +74,51 @@ const RegisterScreen = ({navigation}) => {
         <Text style={styles.text}>Gender:</Text>
         <View style={{flexDirection: 'row'}}>
           <RadioButton
-            value="First"
-            status={checked === 'first' ? 'checked' : 'unchecked'}
-            onPress={() => setChecked('first')}
+            value=" Male"
+            status={checked === 'Male' ? 'checked' : 'unchecked'}
+            onPress={() => setChecked('Male')}
           />
           <Text style={styles.text}>Male</Text>
         </View>
         <View style={{flexDirection: 'row'}}>
           <RadioButton
-            value="second"
-            status={checked === 'second' ? 'checked' : 'unchecked'}
-            onPress={() => setChecked('second')}
+            value="Female"
+            status={checked === 'Female' ? 'checked' : 'unchecked'}
+            onPress={() => setChecked('Female')}
           />
           <Text style={styles.text}>Female</Text>
         </View>
         <View style={{flexDirection: 'row'}}>
           <RadioButton
-            value="Third"
-            status={checked === 'third' ? 'checked' : 'unchecked'}
-            onPress={() => setChecked('third')}
+            value="Other"
+            status={checked === 'Other' ? 'checked' : 'unchecked'}
+            onPress={() => setChecked('Other')}
           />
           <Text style={styles.text}>Other</Text>
         </View>
       </View>
-      {/* <Text style={styles.text}>DoB</Text> */}
+      <View style={{flexDirection: 'row'}}>
+        <Text style={styles.text}>DoB:</Text>
+        <TouchableOpacity onPress={showDatePicker} style={styles.dobButton}>
+          <Text
+            style={{
+              color: 'white',
+              textAlign: 'center',
+
+              fontSize: 18,
+              fontWeight: 400,
+            }}>
+            {selectedDate}
+          </Text>
+        </TouchableOpacity>
+
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible}
+          mode="date"
+          onConfirm={handleConfirm}
+          onCancel={hideDatePicker}
+        />
+      </View>
 
       <View>
         <Dropdown
@@ -106,7 +156,7 @@ const RegisterScreen = ({navigation}) => {
           style={{
             color: 'white',
             textAlign: 'center',
-            padding: '5%',
+            padding: '3%',
             fontSize: 18,
             fontWeight: 500,
           }}>
@@ -160,7 +210,12 @@ const styles = StyleSheet.create({
   },
   dobButton: {
     width: '75%',
-    alignSelf: 'left',
+    backgroundColor: 'darkblue',
+    borderRadius: 50,
+    marginRight: '15%',
+    padding: '3%',
+    marginBottom: '5%',
+    marginLeft: '15%',
   },
 });
 export default RegisterScreen;
