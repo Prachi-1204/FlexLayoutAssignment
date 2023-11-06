@@ -115,7 +115,6 @@ const styles = StyleSheet.create({
   },
 });
 */
-import React from 'react';
 import {
   Image,
   SafeAreaView,
@@ -123,16 +122,25 @@ import {
   StyleSheet,
   TextInput,
   Text,
-  Button,
   Alert,
   Pressable,
   TouchableOpacity,
 } from 'react-native';
+import React, {useState} from 'react';
+
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 function App() {
-  const [number, onChangeNumber] = React.useState('');
-  const [password, setpassword] = React.useState('');
+  const [number, onChangeNumber] = useState('');
+  const [password, setPassword] = useState('');
+  const [isPasswordVisible, setIsPasswordVisisble] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisisble(!isPasswordVisible);
+  };
+  const manageLogin = () => {
+    console.log(Alert.alert('Email : ' + number + '\nPassword : ' + password));
+  };
   return (
     <SafeAreaView style={{backgroundColor: 'white', padding: 20}}>
       {/* <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -222,16 +230,21 @@ function App() {
           }}>
           <TextInput
             style={[styles.input, {flex: 0.9}]}
-            onChangeText={text => setpassword(text)}
+            onChangeText={text => setPassword(text)}
             value={password}
             placeholder="Password"
-            textContentType="password"
-            secureTextEntry
-            enablesReturnKeyAutomatically
-            autoCorrect={false}
+            secureTextEntry={isPasswordVisible}
           />
-          <TouchableOpacity style={{flex: 0.1}}>
-            <Image source={require('./images/eye.png')} />
+          <TouchableOpacity
+            style={styles.togglePasswordVisibility}
+            onPress={togglePasswordVisibility}>
+            <Image
+              source={
+                isPasswordVisible
+                  ? require('./images/eye.png')
+                  : require('./images/openeye.png')
+              }
+              style={styles.icon}></Image>
           </TouchableOpacity>
         </View>
       </View>
@@ -247,9 +260,7 @@ function App() {
           Forgot Password?
         </Text>
       </View>
-      <Pressable
-        style={styles.button}
-        onPress={() => Alert.alert('Incorrect Email or Password')}>
+      <Pressable style={styles.button} onPress={manageLogin}>
         <Text
           style={{
             color: 'white',
@@ -291,6 +302,13 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: '#001965',
     borderRadius: 50,
+  },
+  togglePasswordVisibility: {
+    padding: 10,
+  },
+  icon: {
+    width: 24,
+    height: 24,
   },
 });
 

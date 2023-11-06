@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-function App() {
+
+function Flex() {
   return (
     <View style={styles.maincontainer}>
       <View style={styles.container1}>
@@ -135,4 +136,4 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 });
-export default App;
+export default Flex;
